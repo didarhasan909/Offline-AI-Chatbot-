@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline AI Chatbot</title>
+    <link rel="icon" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3crect width='100' height='100' rx='20' fill='%23075E54'/%3e%3cpath fill='white' d='M68.8,32.2c-2.3-2.1-5.3-3.4-8.6-3.7c-0.9,0-1.7-0.7-1.7-1.6v-3c0-0.9,0.8-1.7,1.7-1.6 c4.7,0.4,9,1.9,12.7,4.7c3.4,2.6,6,6.1,7.5,10.1c0.3,0.8-0.1,1.7-0.9,2l-2.6,1.1c-0.8,0.3-1.7-0.1-2-0.9 C74,38.2,71.8,34.8,68.8,32.2z M58.5,22.1c-1.1,0-2.1-0.9-2.1-2.1v-3.3c0-1.1,0.9-2.1,2.1-2.1h3.3c1.1,0,2.1,0.9,2.1,2.1v3.3 c0,1.1-0.9,2.1-2.1,2.1H58.5z M50,37.2c-6.2,0-11.2,5-11.2,11.2s5,11.2,11.2,11.2s11.2-5,11.2-11.2S56.2,37.2,50,37.2z M31.2,32.2 c2.3-2.1,5.3-3.4,8.6-3.7c0.9,0,1.7-0.7,1.7-1.6v-3c0-0.9-0.8-1.7-1.7-1.6c-4.7,0.4-9,1.9-12.7,4.7c-3.4,2.6-6,6.1-7.5,10.1 c-0.3,0.8,0.1,1.7,0.9,2l2.6,1.1c0.8,0.3,1.7-0.1,2-0.9C26,38.2,28.2,34.8,31.2,32.2z M41.5,22.1c-1.1,0-2.1-0.9-2.1-2.1v-3.3 c0-1.1,0.9-2.1,2.1-2.1h-3.3c-1.1,0-2.1,0.9-2.1,2.1v3.3c0,1.1,0.9,2.1,2.1,2.1H41.5z M50,69.5c-4.6,0-8.8-1.8-11.9-4.8 c-0.6-0.6-0.7-1.6-0.2-2.3l1.8-2.5c0.5-0.7,1.5-0.8,2.2-0.2c2.2,1.9,5,3,8.1,3s5.9-1.1,8.1-3c0.7-0.5,1.7-0.4,2.2,0.2l1.8,2.5 c0.5,0.7,0.4,1.7-0.2,2.3C58.8,67.7,54.6,69.5,50,69.5z M34.4,56.7c-0.9,0-1.7-0.8-1.7-1.7v-3.3c0-0.9,0.8-1.7,1.7-1.7h3.3 c0.9,0,1.7,0.8,1.7,1.7v3.3c0,0.9-0.8,1.7-1.7,1.7H34.4z M65.6,56.7c-0.9,0-1.7-0.8-1.7-1.7v-3.3c0-0.9,0.8-1.7,1.7-1.7h-3.3 c-0.9,0-1.7,0.8-1.7,1.7v3.3c0,0.9,0.8,1.7,1.7,1.7H65.6z M50,85.2c-5.7,0-11-2.2-14.9-5.9c-0.6-0.6-1.6-0.6-2.2,0 l-2.3,2.3c-0.6,0.6-0.6,1.6,0,2.2C35.2,88.4,42.3,91,50,91s14.8-2.6,19.4-7.2c0.6-0.6,0.6-1.6,0-2.2l-2.3-2.3 c-0.6-0.6-1.6-0.6-2.2,0C61,83,55.7,85.2,50,85.2z'/%3e%3c/svg%3e">
+    <style>
+        /* CSS কোড অপরিবর্তিত আছে */
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .chat-container { width: 400px; height: 600px; background-color: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { background-color: #075E54; color: white; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .chat-window { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { max-width: 85%; position: relative; padding: 10px 15px; border-radius: 18px; line-height: 1.5; word-wrap: break-word; }
+        .message-text { user-select: text; -webkit-user-select: text; -moz-user-select: text; }
+        .user-message { background-color: #DCF8C6; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .bot-message { background-color: #ECECEC; align-self: flex-start; border-bottom-left-radius: 4px; padding-right: 40px; }
+        .copy-btn { position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.1); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; opacity: 0; transition: opacity 0.2s, background-color 0.2s; display: flex; align-items: center; justify-content: center; }
+        .bot-message:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { background: rgba(0,0,0,0.2); }
+        .chat-input-area { display: flex; padding: 10px; border-top: 1px solid #ddd; background-color: #f0f2f5; }
+        #user-input { flex-grow: 1; border: 1px solid #ccc; border-radius: 20px; padding: 10px 15px; font-size: 16px; outline: none; }
+        #send-btn { background-color: #128C7E; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; margin-left: 10px; font-size: 20px; cursor: pointer; }
+        #open-panel-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .side-panel { position: fixed; top: 0; left: 0; width: 300px; height: 100%; background-color: #fff; box-shadow: 2px 0 5px rgba(0,0,0,0.1); transform: translateX(-100%); transition: transform 0.3s ease-in-out; z-index: 1000; padding: 20px; display: flex; flex-direction: column; }
+        .side-panel.open { transform: translateX(0); }
+        .side-panel h3 { margin-top: 0; color: #075E54; }
+        .side-panel label { margin-top: 15px; margin-bottom: 5px; color: #333; }
+        .side-panel input, .side-panel textarea { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
+        .side-panel textarea { resize: vertical; min-height: 100px; }
+        #save-knowledge-btn { background-color: #128C7E; color: white; border: none; border-radius: 5px; padding: 12px; cursor: pointer; margin-top: 20px; font-size: 16px; }
+        #close-panel-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #555; }
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); z-index: 999; display: none; }
+        #overlay.show { display: block; }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div class="side-panel" id="side-panel">
+        <button id="close-panel-btn">&times;</button>
+        <h3>নতুন তথ্য যোগ করুন</h3>
+        <label for="new-question">প্রশ্ন (Keyword):</label>
+        <input type="text" id="new-question" placeholder="এখানে মূল প্রশ্নটি লিখুন">
+        <label for="new-answer">উত্তর:</label>
+        <textarea id="new-answer" placeholder="এখানে উত্তরটি লিখুন"></textarea>
+        <button id="save-knowledge-btn">সংরক্ষণ করুন</button>
+    </div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <span style="flex-grow: 1;">অফলাইন চ্যাট অ্যাসিস্ট্যান্ট</span>
+            <button id="open-panel-btn">☰</button>
+        </div>
+        <div class="chat-window" id="chat-window">
+            <!-- Initial bot message will be created by script -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="এখানে আপনার প্রশ্ন লিখুন...">
+            <button id="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+<script>
+    // --- জ্ঞান ভান্ডার (Knowledge Base) - নতুন কাঠামো সহ ---
+    const knowledgeBase = {
+        "downtube": { text: "Downtube অ্যাপ ডাউনলোড করতে এই লিংকটি https://www.appcreator24.com/app3547692-wb9ck7 কপি করে আপনার ক্রোম ব্রাউজারের অ্যাড্রেসবারে সার্চ করুন। এই অ্যাপটিতে ভিডিও দেখা, গেম খেলা, ব্রাউজিং এবং ভিডিও পোস্ট করা যায়।", emoji: "📱" },
+        "ডাউনটিউব": { text: "Downtube অ্যাপ ডাউনলোড করতে এই লিংকটি https://www.appcreator24.com/app3547692-wb9ck7 কপি করে আপনার ক্রোম ব্রাউজারের অ্যাড্রেসবারে সার্চ করুন। এই অ্যাপটিতে ভিডিও দেখা, গেম খেলা, ব্রাউজিং এবং ভিডিও পোস্ট করা যায়।", emoji: "📱" },
+        "hello": { text: "হ্যালো! আপনাকে কিভাবে সাহায্য করতে পারি?", emoji: "👋" },
+        "hi": { text: "হাই! কেমন আছেন?", emoji: "😊" },
+        "কেমন আছো": { text: "আমি একটি কম্পিউটার প্রোগ্রাম, আমি সবসময় ভালো থাকি। ধন্যবাদ!", emoji: "🤖" },
+        "কেমন আছেন": { text: "আমি একটি কম্পিউটার প্রোগ্রাম, আমি সবসময় ভালো থাকি। ধন্যবাদ!", emoji: "🤖" },
+        "তুমি কে": { text: "আমি একটি অফলাইন চ্যাটবট, যা বেসিক প্রশ্নের উত্তর দেওয়ার জন্য তৈরি করা হয়েছে।", emoji: "💡" },
+        "তোমার নাম কি": { text: "আমার কোনো নাম নেই। আমি একটি সাধারণ চ্যাট অ্যাসিস্ট্যান্ট।", emoji: "👤" },
+        "কি করতে পারো": { text: "আমি বাংলাদেশ ও বিভিন্ন সাধারণ তথ্যের উত্তর দিতে পারি এবং Downtube অ্যাপ সম্পর্কে তথ্য দিতে পারি।", emoji: "🛠️" },
+        "ধন্যবাদ": { text: "আপনাকে স্বাগতম!", emoji: "😊" },
+        "thank you": { text: "You're welcome!", emoji: "😊" },
+        "আজ কত তারিখ": { text: `আজ ${new Date().toLocaleDateString('bn-BD')}`, emoji: "📅" },
+        "এখন সময় কত": { text: `এখন সময় ${new Date().toLocaleTimeString('bn-BD')}`, emoji: "⏰" },
+        "বিদায়": { text: "বিদায়! আপনার দিনটি শুভ হোক।", emoji: "👋" },
+        "বাংলাদেশের রাজধানীর নাম কি": { text: "বাংলাদেশের রাজধানীর নাম ঢাকা।", emoji: "🏙️" },
+        "রাজধানী": { text: "বাংলাদেশের রাজধানীর নাম ঢাকা।", emoji: "🏙️" },
+        "বাংলাদেশের প্রধানমন্ত্রী কে": { text: "বাংলাদেশের বর্তমান প্রধানমন্ত্রীর নাম শেখ হাসিনা।", emoji: "👤" },
+        "প্রধানমন্ত্রী": { text: "বাংলাদেশের বর্তমান প্রধানমন্ত্রীর নাম শেখ হাসিনা।", emoji: "👤" },
+        "বাংলাদেশের রাষ্ট্রপতি কে": { text: "বাংলাদেশের বর্তমান রাষ্ট্রপতির নাম মোহাম্মদ সাহাবুদ্দিন।", emoji: "👤" },
+        "রাষ্ট্রপতি": { text: "বাংলাদেশের বর্তমান রাষ্ট্রপতির নাম মোহাম্মদ সাহাবুদ্দিন।", emoji: "👤" },
+        "বাংলাদেশের জাতীয় ফুল কি": { text: "বাংলাদেশের জাতীয় ফুল শাপলা।", emoji: "🌸" },
+        "জাতীয় ফুল": { text: "বাংলাদেশের জাতীয় ফুল শাপলা।", emoji: "🌸" },
+        "বাংলাদেশের জাতীয় ফল কি": { text: "বাংলাদেশের জাতীয় ফল কাঁঠাল।", emoji: "🍈" },
+        "জাতীয় ফল": { text: "বাংলাদেশের জাতীয় ফল কাঁঠাল।", emoji: "🍈" },
+        "বাংলাদেশের জাতীয় পাখি কি": { text: "বাংলাদেশের জাতীয় পাখি দোয়েল।", emoji: "🐦" },
+        "জাতীয় পাখি": { text: "বাংলাদেশের জাতীয় পাখি দোয়েল।", emoji: "🐦" },
+        "বাংলাদেশের জাতীয় মাছ কি": { text: "বাংলাদেশের জাতীয় মাছ ইলিশ।", emoji: "🐟" },
+        "জাতীয় মাছ": { text: "বাংলাদেশের জাতীয় মাছ ইলিশ।", emoji: "🐟" },
+        "বাংলাদেশের জাতীয় পশু কি": { text: "বাংলাদেশের জাতীয় পশু রয়েল বেঙ্গল টাইগার।", emoji: "🐅" },
+        "জাতীয় পশু": { text: "বাংলাদেশের জাতীয় পশু রয়েল বেঙ্গল টাইগার।", emoji: "🐅" },
+        "আয়তন কত": { text: "বাংলাদেশের আয়তন প্রায় ১,৪৭,৫৭০ বর্গ কিলোমিটার।", emoji: "🗺️" },
+        "জনসংখ্যা কত": { text: "বাংলাদেশের জনসংখ্যা প্রায় ১৭ কোটির বেশি।", emoji: "👨‍👩‍👧‍👦" },
+        "স্বাধীনতা দিবস কবে": { text: "বাংলাদেশের স্বাধীনতা দিবস ২৬শে মার্চ।", emoji: "🇧🇩" },
+        "বিজয় দিবস কবে": { text: "বাংলাদেশের বিজয় দিবস ১৬ই ডিসেম্বর।", emoji: "🇧🇩" },
+        "ভাষা দিবস কবে": { text: "আন্তর্জাতিক মাতৃভাষা দিবস ২১শে ফেব্রুয়ারি।", emoji: "❤️" },
+        "জাতির পিতা কে": { text: "বাংলাদেশের জাতির পিতা বঙ্গবন্ধু শেখ মুজিবুর রহমান।", emoji: "👤" },
+        "বঙ্গবন্ধু": { text: "বঙ্গবন্ধু শেখ মুজিবুর রহমান বাংলাদেশের জাতির পিতা।", emoji: "👤" },
+        "জাতীয় সংগীত": { text: "আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।", emoji: "🎶" },
+        "জাতীয় সংগীত কে লিখেছেন": { text: "বাংলাদেশের জাতীয় সংগীতের রচয়িতা রবীন্দ্রনাথ ঠাকুর।", emoji: "✍️" }
+    };
+
+    const userInput = document.getElementById('user-input');
+    const chatWindow = document.getElementById('chat-window');
+
+    function copyToClipboard(buttonElement) {
+        const textToCopy = buttonElement.parentElement.querySelector('.message-text').innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            buttonElement.innerText = '✅';
+            setTimeout(() => { buttonElement.innerText = '📋'; }, 2000);
+        }).catch(err => { console.error('Copy failed:', err); });
+    }
+
+    function displayMessage(text, sender) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.classList.add('message', `${sender}-message`);
+
+        const textElement = document.createElement('span');
+        textElement.classList.add('message-text');
+        textElement.innerText = text;
+        messageWrapper.appendChild(textElement);
+
+        if (sender === 'bot') {
+            const copyButton = document.createElement('button');
+            copyButton.classList.add('copy-btn');
+            copyButton.innerHTML = '📋';
+            copyButton.onclick = function() { copyToClipboard(this); };
+            messageWrapper.appendChild(copyButton);
+        }
+
+        chatWindow.appendChild(messageWrapper);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function sendMessage() {
+        const messageText = userInput.value.trim();
+        if (messageText === "") return;
+        displayMessage(messageText, 'user');
+        
+        // --- sendMessage ফাংশনে পরিবর্তন ---
+        const botResponse = getBotResponse(messageText); // এটি এখন একটি অবজেক্ট রিটার্ন করে
+        const formattedResponse = `${botResponse.text} ${botResponse.emoji}`; // টেক্সট এবং ইমোজি একত্রিত করা
+
+        setTimeout(() => {
+            displayMessage(formattedResponse, 'bot');
+        }, 500);
+        
+        userInput.value = "";
+    }
+
+    function levenshteinDistance(s1, s2) { /* অপরিবর্তিত */ s1 = s1.toLowerCase(); s2 = s2.toLowerCase(); const costs = []; for (let i = 0; i <= s1.length; i++) { let lastValue = i; for (let j = 0; j <= s2.length; j++) { if (i === 0) { costs[j] = j; } else { if (j > 0) { let newValue = costs[j - 1]; if (s1.charAt(i - 1) !== s2.charAt(j - 1)) { newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1; } costs[j - 1] = lastValue; lastValue = newValue; } } } if (i > 0) costs[s2.length] = lastValue; } return costs[s2.length]; }
+    function calculateSimilarity(s1, s2) { /* অপরিবর্তিত */ let longer = s1; let shorter = s2; if (s1.length < s2.length) { longer = s2; shorter = s1; } const longerLength = longer.length; if (longerLength === 0) { return 1.0; } return (longerLength - levenshteinDistance(longer, shorter)) / parseFloat(longerLength); }
+
+    // --- getBotResponse ফাংশনে পরিবর্তন ---
+    function getBotResponse(userText) {
+        const lowerUserText = userText.toLowerCase();
+        let bestMatch = { key: null, score: 0.0 };
+        const SIMILARITY_THRESHOLD = 0.7;
+        
+        for (const key in knowledgeBase) {
+            const similarity = calculateSimilarity(lowerUserText, key);
+            if (similarity > bestMatch.score) {
+                bestMatch = { key: key, score: similarity };
+            }
+        }
+        
+        if (bestMatch.score >= SIMILARITY_THRESHOLD) {
+            return knowledgeBase[bestMatch.key]; // এখন পুরো {text, emoji} অবজেক্ট রিটার্ন হচ্ছে
+        }
+        
+        // যদি কোনো উত্তর না পাওয়া যায়
+        return { 
+            text: "দুঃখিত, আমি আপনার প্রশ্নটি বুঝতে পারিনি। আপনি মেনু থেকে নতুন তথ্য যোগ করতে পারেন বা অন্যভাবে প্রশ্ন করতে পারেন।", 
+            emoji: "🤔" 
+        };
+    }
+
+    // --- saveNewKnowledge ফাংশনে পরিবর্তন ---
+    function saveNewKnowledge() {
+        const newQuestion = document.getElementById('new-question').value.trim().toLowerCase();
+        const newAnswer = document.getElementById('new-answer').value.trim();
+        if (!newQuestion || !newAnswer) { alert("প্রশ্ন এবং উত্তর উভয়ই পূরণ করতে হবে।"); return; }
+        
+        // নতুন কাঠামো অনুযায়ী সেভ করা হচ্ছে
+        knowledgeBase[newQuestion] = { text: newAnswer, emoji: "✍️" }; 
+        
+        let customKnowledge = JSON.parse(localStorage.getItem('customKnowledge')) || {};
+        customKnowledge[newQuestion] = { text: newAnswer, emoji: "✍️" };
+        localStorage.setItem('customKnowledge', JSON.stringify(customKnowledge));
+        
+        alert("নতুন তথ্য সফলভাবে সংরক্ষণ করা হয়েছে!");
+        document.getElementById('new-question').value = "";
+        document.getElementById('new-answer').value = "";
+        closePanel();
+    }
+
+    // --- বাকি ফাংশনগুলো অপরিবর্তিত ---
+    const sidePanel = document.getElementById('side-panel'); const openPanelBtn = document.getElementById('open-panel-btn'); const closePanelBtn = document.getElementById('close-panel-btn'); const saveKnowledgeBtn = document.getElementById('save-knowledge-btn'); const overlay = document.getElementById('overlay');
+    function loadCustomKnowledge() { const customKnowledge = JSON.parse(localStorage.getItem('customKnowledge')); if (customKnowledge) { Object.assign(knowledgeBase, customKnowledge); } }
+    loadCustomKnowledge();
+    userInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') sendMessage(); });
+    function openPanel() { sidePanel.classList.add('open'); overlay.classList.add('show'); }
+    function closePanel() { sidePanel.classList.remove('open'); overlay.classList.remove('show'); }
+    openPanelBtn.addEventListener('click', openPanel); closePanelBtn.addEventListener('click', closePanel); overlay.addEventListener('click', closePanel); saveKnowledgeBtn.addEventListener('click', saveNewKnowledge);
+
+    // --- Initial Welcome Message ---
+    displayMessage("হ্যালো! আমি আপনার উন্নত অফলাইন অ্যাসিস্ট্যান্ট। এখন আমি ইমোজি সহ উত্তর দিতে পারি। 😊", "bot");
+</script>
+
+</body>
+</html>
