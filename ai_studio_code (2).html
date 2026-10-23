@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Chewy&family=Bungee&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        #app {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.1s forwards;
+        }
+
+        @keyframes jiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(0.5deg); }
+            75% { transform: rotate(-0.5deg); }
+        }
+
+        body {
+            background: linear-gradient(135deg, #FFD700 0%, #FF69B4 100%);
+            font-family: 'Chewy', cursive;
+        }
+
+        .bubble-card {
+            border: 4px solid #1a202c;
+            border-radius: 1.5rem;
+            box-shadow: 8px 8px 0px 0px #4299e1, 12px 12px 0px 0px #f6e05e;
+            transition: transform 0.15s ease-out;
+        }
+
+        .input-box {
+            border: 4px dashed #4299e1;
+            background-color: #ffffff;
+            color: #1a202c;
+            font-family: 'Bungee', cursive;
+        }
+
+        .bangla-text {
+            font-family: 'Hind Siliguri', 'Chewy', sans-serif !important;
+        }
+
+        .font-style-box {
+            background-color: #ffffff;
+            border: 3px solid #1a202c;
+            border-radius: 0.75rem;
+            min-height: 120px;
+            box-shadow: 4px 4px 0px 0px #FF69B4;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.15s;
+        }
+        
+        .font-style-box:hover {
+            animation: jiggle 0.2s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        .action-button {
+            background-color: #4299e1;
+            color: #ffffff;
+            border: 2px solid #1a202c;
+            border-radius: 0.5rem;
+            box-shadow: 2px 2px 0px 0px #1a202c;
+            transition: all 0.1s;
+        }
+        .action-button:hover {
+            background-color: #3182ce;
+            box-shadow: 1px 1px 0px 0px #1a202c;
+            transform: translate(1px, 1px);
+        }
+        
+        .full-width-footer {
+            background-color: #f6e05e;
+            border-top: 6px solid #1a202c;
+            box-shadow: 0 -8px 0 0 #4299e1;
+            height: 140px;
+            animation: floatAnimation 4s ease-in-out infinite;
+        }
+
+        .brand-text:hover {
+            transform: scale(1.05);
+            text-shadow: 2px 2px 0 #FF69B4;
+            transition: all 0.15s ease-out;
+        }
+
+        /* Compact Three Dot Menu Button */
+        .menu-btn {
+            border: 2px solid #1a202c;
+            background-color: #ffffff;
+            box-shadow: 2px 2px 0px 0px #1a202c;
+            transition: all 0.15s ease;
+        }
+        .menu-btn:hover {
+            background-color: #fef08a;
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px 0px #1a202c;
+        }
+
+        .dropdown-card {
+            border: 3px solid #1a202c;
+            box-shadow: 4px 4px 0px 0px #1a202c;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div id="app" class="max-w-6xl mx-auto space-y-8 pb-16">
+        
+        <!-- Header area with compact top-right Three-Dot Menu -->
+        <header class="text-center mb-8 relative pt-2">
+            <!-- Three Dot Menu (Small & positioned neatly so it doesn't overlap title) -->
+            <div class="absolute top-0 right-0 z-50">
+                <button id="menu-toggle-btn" onclick="toggleLanguageMenu(event)" class="menu-btn w-8 h-8 rounded-full flex items-center justify-center text-gray-800" title="Choose Language / ভাষা নির্বাচন">
+                    <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl dropdown-card py-2 z-50 text-left font-sans">
+                    <button onclick="switchLanguage('en')" class="w-full px-4 py-2 text-sm font-bold text-gray-800 hover:bg-yellow-100 flex items-center justify-between transition-colors">
+                        <span class="flex items-center gap-2">🇬🇧 English</span>
+                        <span id="check-en" class="text-green-600 font-extrabold text-xs">✓</span>
+                    </button>
+                    <div class="border-t border-gray-200 my-1"></div>
+                    <button onclick="switchLanguage('bn')" class="w-full px-4 py-2 text-sm font-bold text-gray-800 hover:bg-yellow-100 flex items-center justify-between transition-colors">
+                        <span class="flex items-center gap-2">🇧🇩 বাংলা</span>
+                        <span id="check-bn" class="hidden text-green-600 font-extrabold text-xs">✓</span>
+                    </button>
+                </div>
+            </div>
+
+            <h1 id="app-heading" class="text-4xl sm:text-6xl text-white tracking-widest leading-none" style="text-shadow: 6px 6px 0 #1a202c; font-family: 'Luckiest Guy', cursive;">
+                FONT GENERATOR
+            </h1>
+            <p id="app-subheading" class="mt-2 text-xl font-bold text-gray-800">
+                Generate 80+ font styles instantly.
+            </p>
+        </header>
+
+        <div class="p-6 bubble-card bg-yellow-100">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+                <label id="input-label" for="text-input" class="block text-xl sm:text-2xl font-extrabold text-gray-800" style="font-family: 'Luckiest Guy', cursive;">
+                    TYPE YOUR TEXT:
+                </label>
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="copyAllGeneratedText()" class="action-button px-4 py-2 text-sm font-bold flex items-center gap-1.5 shadow-[2px_2px_0_#1a202c]">
+                        <i data-lucide="copy-check" class="w-4 h-4"></i>
+                        <span id="copy-all-btn-text">Copy All Styles</span>
+                    </button>
+                </div>
+            </div>
+
+            <textarea id="text-input" rows="3"
+                class="input-box w-full p-4 text-xl sm:text-2xl resize-none focus:outline-none focus:ring-4 focus:ring-yellow-400"
+                placeholder="Type something to see it transform..." oninput="handleInput()">Type something to start</textarea>
+        </div>
+
+        <div id="styles-output" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        </div>
+    </div>
+
+    <footer class="py-8 full-width-footer -mx-4 sm:-mx-8">
+        <div class="max-w-6xl mx-auto text-center px-4 sm:px-8">
+            <p class="text-xl sm:text-2xl font-extrabold text-gray-800 tracking-wider brand-text cursor-pointer" style="font-family: 'Luckiest Guy', cursive; text-shadow: 1px 1px 0 #fff;">
+                A <span class="text-blue-600">FLEX CODER</span> Creation!
+            </p>
+            <p class="mt-2 text-sm text-gray-600 font-medium font-sans">
+                &copy; <span id="current-year"></span> Flex Coder. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let currentLanguage = 'en'; // 'en' | 'bn'
+
+        function handleInput() {
+            updateStyles();
+        }
+
+        function toggleLanguageMenu(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('lang-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('lang-dropdown');
+            const menuBtn = document.getElementById('menu-toggle-btn');
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                if (!dropdown.contains(e.target) && !menuBtn.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            document.getElementById('lang-dropdown').classList.add('hidden');
+
+            const checkEn = document.getElementById('check-en');
+            const checkBn = document.getElementById('check-bn');
+            const inputLabel = document.getElementById('input-label');
+            const textInput = document.getElementById('text-input');
+            const appHeading = document.getElementById('app-heading');
+            const appSubheading = document.getElementById('app-subheading');
+            const copyAllBtn = document.getElementById('copy-all-btn-text');
+
+            if (lang === 'bn') {
+                checkEn.classList.add('hidden');
+                checkBn.classList.remove('hidden');
+                appHeading.textContent = "বাংলা ফন্ট জেনারেটর";
+                appSubheading.textContent = "তৈরি করো ৩০+ আকর্ষণীয় প্রিমিয়াম বাংলা স্টাইল এক ক্লিকে।";
+                inputLabel.textContent = "এখানে তোমার নাম বা টেক্সট লিখো:";
+                inputLabel.classList.add('bangla-text');
+                textInput.classList.add('bangla-text');
+                textInput.placeholder = "এখানে তোমার নাম বা বাক্য লিখো...";
+                if (textInput.value === 'Type something to start' || !textInput.value.trim()) {
+                    textInput.value = "এখানে তোমার নাম লিখো";
+                }
+                copyAllBtn.textContent = "সবগুলো কপি করো";
+            } else {
+                checkEn.classList.remove('hidden');
+                checkBn.classList.add('hidden');
+                appHeading.textContent = "FONT GENERATOR";
+                appSubheading.textContent = "Generate 80+ font styles instantly.";
+                inputLabel.textContent = "TYPE YOUR TEXT:";
+                inputLabel.classList.remove('bangla-text');
+                textInput.classList.remove('bangla-text');
+                textInput.placeholder = "Type something to see it transform...";
+                if (textInput.value === 'এখানে তোমার নাম লিখো' || !textInput.value.trim()) {
+                    textInput.value = "Type something to start";
+                }
+                copyAllBtn.textContent = "Copy All Styles";
+            }
+
+            updateStyles();
+        }
+
+        // ==========================================
+        // EXISTING 44 ENGLISH STYLES (100% PRESERVED)
+        // ==========================================
+        const UNICODE_MAP = {
+            'a': ['ⓐ', '𝗮', '𝙖', '𝒶', '𝓪', '𝔞', '𝖆', '𝕒', '𝐚', '𝘢', '𝙖', '𝚊', 'ａ', 'ᴀ', 'ᵃ', 'ₐ', 'ⱥ', 'å', 'α', '♥', 'ɐ', 'æ', 'ค', 'ä', '🅲', '𝕒̶', 'ᗩ', 'Ꜳ', 'æ', 'ä', 'A', '🄰', 'ᵃ', 'ₐ', 'ⱥ', 'å', 'α', '♥', 'ɐ', 'æ', 'ค', 'ä'],
+            'b': ['ⓑ', '𝗯', '𝙗', '𝒷', '𝓫', '𝔟', '𝖇', '𝕓', '𝐛', '𝘣', '𝙗', '𝚋', 'ｂ', 'ʙ', 'ᵇ', 'ᵦ', 'ƀ', 'ß', 'β', '♥', 'q', 'ɓ', '๒', 'ᵇ', '🅳', '𝕓̶', 'ℬ', 'ꝁ', 'ƀ', 'ß', 'B', '🄱', 'ᵇ', 'ᵦ', 'ƀ', 'ß', 'β', '♥', 'q', 'ɓ', '๒', 'ᵇ'],
+            'c': ['ⓒ', '𝗰', '𝙘', '𝒸', '𝓬', '𝔠', '𝖈', '𝕔', '𝐜', '𝘤', '𝙘', '𝚌', 'ｃ', 'ᴄ', 'ᶜ', 'Ꜳ', '¢', 'ɕ', '♥', 'ɔ', 'ɔ', '匚', '𝔠', '🅴', '𝕔̶', '𝒞', 'ꜳ', '¢', 'ɕ', 'C', '🄲', 'ᶜ', 'Ꜳ', '¢', 'ɕ', '♥', 'ɔ', 'ɔ', '匚', '𝔠'],
+            'd': ['ⓓ', '𝗱', '𝙙', '𝒹', '𝓭', '𝔡', '𝖉', '𝕕', '𝐝', '𝘥', '𝙙', '𝚍', 'ｄ', 'ᴅ', 'ᵈ', 'ᑯ', 'ᑯ', 'đ', '₫', '∂', '♥', 'p', 'ɗ', '๔', 'đ', '🅵', '𝕕̶', '𝔇', 'Ꝕ', 'đ', '₫', 'D', '🄳', 'ᵈ', 'ᑯ', 'đ', '₫', '∂', '♥', 'p', 'ɗ', '๔', 'đ'],
+            'e': ['ⓔ', '𝗲', '𝙚', '𝑒', '𝓮', '𝔢', '𝖊', '𝕖', '𝐞', '𝘦', '𝙚', '𝚎', 'ｅ', 'ᴇ', 'ᵉ', 'ₑ', 'ɇ', 'ε', '♥', 'ǝ', 'ə', 'อ', 'ɇ', '🅶', '𝕖̶', '𝓔', 'Ꝼ', 'ɇ', 'ε', 'E', '🄴', 'ᵉ', 'ₑ', 'ɇ', 'ε', '♥', 'ǝ', 'ə', 'อ', 'ɇ'],
+            'f': ['ⓕ', '𝗳', '𝙛', '𝒻', '𝓯', '𝔣', '𝖋', '𝕗', '𝐟', '𝘧', '𝙛', '𝚏', 'ｆ', 'ғ', 'ᶠ', 'Ꝼ', 'ƒ', '♥', 'ɟ', 'ʄ', 'Ŧ', 'ƒ', '🅷', '𝕗̶', '𝔉', 'Ꝿ', 'ƒ', 'F', '🄵', 'ᶠ', 'Ꝼ', 'ƒ', '♥', 'ɟ', 'ʄ', 'Ŧ', 'ƒ'],
+            'g': ['ⓖ', '𝗴', '𝙜', '𝑔', '𝓰', '𝔤', '𝖌', '𝕘', '𝐠', '𝘨', '𝙜', '𝚐', 'ｇ', 'ɢ', 'ᵍ', 'ꝿ', 'ƒ', '♥', 'ƃ', 'ɠ', 'ฏ', 'ɠ', '🅸', '𝕘̶', '𝒢', 'Ᵹ', 'ƒ', 'G', '🄶', 'ᵍ', 'ꝿ', 'ƒ', '♥', 'ƃ', 'ɠ', 'ฏ', 'ɠ'],
+            'h': ['ⓗ', '𝗵', '𝙝', '𝒽', '𝓱', '𝔥', '𝖍', '𝕙', '𝐡', '𝘩', '𝙝', '𝚑', 'ｈ', 'ʜ', 'ʰ', 'Ꝕ', 'ħ', '♥', 'ɥ', 'ɧ', '卄', 'ħ', '🅹', '𝕙̶', '𝓗', 'Ꝥ', 'ħ', 'H', '🄷', 'ʰ', 'Ꝕ', 'ħ', '♥', 'ɥ', 'ɧ', '卄', 'ħ'],
+            'i': ['ⓘ', '𝗶', '𝙞', '𝒾', '𝓲', '𝔦', '𝖎', '𝕚', '𝐢', '𝘪', '𝙞', '𝚒', 'ｉ', 'ɪ', 'ⁱ', 'ᵢ', 'ɨ', 'ɩ', '♥', 'ᴉ', 'ɪ', 'เ', 'ɨ', '🅺', '𝕚̶', 'ℑ', 'ɨ', 'I', '🄸', 'ⁱ', 'ᵢ', 'ɨ', 'ɩ', '♥', 'ᴉ', 'ɪ', 'เ', 'ɨ'],
+            'j': ['ⓙ', '𝗷', '𝙟', '𝒿', '𝓳', '𝔧', '𝖏', '𝕛', '𝐣', '𝘫', '𝙟', '𝚓', 'ｊ', 'ᴊ', 'ʲ', 'ȷ', 'ʝ', '♥', 'ɾ', 'ɟ', 'ว', 'ʝ', '🅻', '𝕛̶', '𝒥', 'ʝ', 'J', '🄹', 'ʲ', 'ȷ', 'ʝ', '♥', 'ɾ', 'ɟ', 'ว', 'ʝ'],
+            'k': ['ⓚ', '𝗸', '𝙠', '𝓀', '𝓴', '𝔨', '𝖐', '𝕜', '𝐤', '𝘬', '𝙠', '𝚔', 'ｋ', 'ᴋ', 'ᵏ', 'ꝁ', 'κ', '♥', 'ʞ', 'ƙ', 'к', 'ƙ', '🅼', '𝕜̶', '𝒦', 'ƙ', 'K', '🄺', 'ᵏ', 'ꝁ', 'κ', '♥', 'ʞ', 'ƙ', 'к', 'ƙ'],
+            'l': ['ⓛ', '𝗹', '𝙡', '𝓁', '𝓵', '𝔩', '𝖑', '𝕝', '𝐥', '𝘭', '𝙡', '𝚕', 'ｌ', 'ʟ', 'ˡ', 'ⱡ', 'λ', '♥', 'l', 'ɭ', 'ℓ', 'ɭ', '🅽', '𝕝̶', '𝔏', 'ⱡ', 'L', '🄻', 'ˡ', 'ⱡ', 'λ', '♥', 'l', 'ɭ', 'ℓ', 'ɭ'],
+            'm': ['ⓜ', '𝗺', '𝙢', '𝓂', '𝓶', '𝔪', '𝖒', '𝕞', '𝐦', '𝘮', '𝙢', '𝚖', 'ｍ', 'ᴍ', 'ᵐ', 'ꝳ', 'μ', '♥', 'ɯ', 'ɱ', '๓', 'ɱ', '🅾', '𝕞̶', '𝓜', 'ꝳ', 'μ', 'M', '🄼', 'ᵐ', 'ꝳ', 'μ', '♥', 'ɯ', 'ɱ', '๓', 'ɱ'],
+            'n': ['ⓝ', '𝗻', '𝙣', '𝓃', '𝓷', '𝔫', '𝖓', '𝕟', '𝐧', '𝘯', '𝙣', '𝚗', 'ｎ', 'ɴ', 'ⁿ', 'ꝕ', 'ñ', 'η', '♥', 'u', 'ɲ', 'и', 'ñ', '🅿', '𝕟̶', '𝒩', 'ꝕ', 'ñ', 'N', '🄽', 'ⁿ', 'ꝕ', 'ñ', 'η', '♥', 'u', 'ɲ', 'и', 'ñ'],
+            'o': ['ⓞ', '𝗼', '𝙤', '𝑜', '𝓸', '𝔬', '𝖔', '𝕠', '𝐨', '𝘰', '𝙤', '𝚘', 'ｏ', 'ᴏ', 'ᵒ', 'ₒ', 'ø', 'σ', '♥', 'o', 'ɵ', '๐', 'ø', '🆀', '𝕠̶', '𝒪', 'ø', 'O', '🄾', 'ᵒ', 'ₒ', 'ø', 'σ', '♥', 'o', 'ɵ', '๐', 'ø'],
+            'p': ['ⓟ', '𝗽', '𝙥', '𝓅', '𝓹', '𝔭', '𝖕', '𝕡', '𝐩', '𝘱', '𝙥', '𝚙', 'ｐ', 'ᴘ', 'ᵖ', 'ₚ', 'þ', 'π', '♥', 'd', 'ρ', '卩', 'þ', '🆁', '𝕡̶', '𝒫', 'þ', 'P', '🄿', 'ᵖ', 'ₚ', 'þ', 'π', '♥', 'd', 'ρ', '卩', 'þ'],
+            'q': ['ⓠ', '𝗤', '𝙦', '𝒬', '𝓆', '𝔮', '𝖖', '𝕢', '𝚀', '𝘲', '𝙦', '𝚚', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤', '𝚀', '𝗤'],
+            'r': ['ⓡ', '𝗿', '𝙧', '𝓇', '𝓻', '𝔯', '𝖗', '𝕣', '𝐫', '𝘳', '𝙧', '𝚛', 'ｒ', 'ʀ', 'ʳ', 'ꝛ', '®', 'ρ', '♥', 'ɹ', 'ʀ', 'г', 'ʀ', '🆂', '𝕣̶', '𝓡', '®', 'R', '🄬', 'ʳ', 'ꝛ', '®', 'ρ', '♥', 'ɹ', 'ʀ', 'г', 'ʀ'],
+            's': ['ⓢ', '𝘀', '𝙨', '𝓈', '𝓼', '𝔰', '𝖘', '𝕤', '𝐬', '𝘴', '𝙨', '𝚜', 'ｓ', 's', 'ˢ', 'ₛ', 'ſ', 'σ', '♥', 's', 'ʂ', 'ร', 'ʂ', '🆃', '𝕤̶', '𝒮', 'ſ', 'S', '🄢', 'ˢ', 'ₛ', 'ſ', 'σ', '♥', 's', 'ʂ', 'ร', 'ʂ'],
+            't': ['ⓣ', '𝘁', '𝙩', '𝓉', '𝓽', '𝔱', '𝖙', '𝕥', '𝐭', '𝘵', '𝙩', '𝚝', 'ｔ', 'ᴛ', 'ᵗ', 'ꜩ', 'τ', '♥', 'ʇ', 'ʈ', '†', 'ʈ', '🆄', '𝕥̶', '𝒯', 'τ', 'T', '🄣', 'ᵗ', 'ꜩ', 'τ', '♥', 'ʇ', 'ʈ', '†', 'ʈ'],
+            'u': ['ⓤ', '𝘂', '𝙪', '𝓊', '𝓾', '𝔲', '𝖚', '𝕦', '𝐮', '𝘶', '𝙪', '𝚞', 'ｕ', 'ᴜ', 'ᵘ', 'ᵤ', 'υ', '♥', 'n', 'ʉ', 'น', 'ʉ', '🆅', '𝕦̶', '𝒰', 'υ', 'U', '🄤', 'ᵘ', 'ᵤ', 'υ', '♥', 'n', 'ʉ', 'น', 'ʉ'],
+            'v': ['ⓥ', '𝘃', '𝙫', '𝓿', '𝓿', '𝔳', '𝖛', '𝕧', '𝐯', '𝘷', '𝙫', '𝚟', 'ｖ', 'ᴠ', 'ᵛ', 'ꝟ', '♥', 'ʌ', 'ʋ', 'レ', 'ʋ', '🆆', '𝕧̶', '𝒱', 'V', '🄥', 'ᵛ', 'ꝟ', '♥', 'ʌ', 'ʋ', 'レ', 'ʋ'],
+            'w': ['ⓦ', '𝘄', '𝙬', '𝓌', '𝔀', '𝔴', '𝖜', '𝕨', '𝐰', '𝘸', '𝙬', '𝚠', 'ｗ', 'ᴡ', 'ʷ', 'ω', '♥', 'ʍ', 'ʍ', '山', 'ʍ', '🆇', '𝕨̶', '𝒲', 'ω', 'W', '🄦', 'ʷ', 'ω', '♥', 'ʍ', 'ʍ', '山', 'ʍ'],
+            'x': ['ⓧ', '𝘹', '𝘹', '𝓍', '𝔁', '𝔵', '𝔵', '𝕩', '𝐱', '𝘹', '𝙭', '𝚡', 'ｘ', 'x', 'ˣ', 'ₓ', 'χ', '♥', 'x', 'χ', 'メ', 'χ', '🆈', '𝕩̶', '𝒳', 'χ', 'X', '🄧', 'ˣ', 'ₓ', 'χ', '♥', 'x', 'χ', 'メ', 'χ'],
+            'y': ['ⓨ', '𝘆', '𝘆', '𝓎', '𝔂', '𝔶', '𝖞', '𝕪', '𝐲', '𝘺', '𝙮', '𝚢', 'ｙ', 'ʏ', 'ʸ', 'ɏ', '¥', '♥', 'ʎ', 'y', 'ㄚ', '¥', '🆉', '𝕪̶', '𝒴', '¥', 'Y', '🄨', 'ʸ', 'ɏ', '¥', '♥', 'ʎ', 'y', 'ㄚ', '¥'],
+            'z': ['ⓩ', '𝗭', '𝗓', '𝒵', '𝓏', '𝖟', '𝔷', '𝖟', '𝕫', '𝐳', '𝒛', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭', '𝗓', '𝗭'],
+            '0': ['⓪', '𝟬', '𝟎', '𝟘', '𝟶', '𝟶', '𝟘', '𝟎', '⓪', '₀', '⁰', '〇', '０', '⓪', '🄍', '🄐', '🄚', '🄠', '🄨', '🄪', '⓪', '𝟬', '𝟎', '𝟘', '🟆', '🟍', '⓿', '𝟎', '⓪', '₀', '⁰', '〇', '０', '⓪', '🄍', '🄐', '🄚', '🄠', '🄨', '🄪'],
+            '1': ['①', '𝟭', '𝟏', '𝟙', '𝟣', '𝟷', '₁', '¹', 'Ⅰ', '①', '１', '➊', '𝟙', '①', '🄎', '🄑', '🄛', '🄡', '🄩', '🄫', '①', '𝟭', '𝟏', '𝟙', '🟇', '🟎', '➊', '𝟙', '①', '₁', '¹', 'Ⅰ', '①', '１', '➊', '𝟙', '①', '🄎', '🄑', '🄛', '🄡', '🄩'],
+            '2': ['②', '𝟮', '𝟐', '𝟚', '𝟤', '𝟸', '₂', '²', 'Ⅱ', '②', '２', '➋', '🟔', '②', '🄏', '🄒', '🄜', '🄢', '🄪', '🄬', '②', '𝟮', '𝟐', '🟈', '🟏', '➋', '🟔', '②', '₂', '²', 'Ⅱ', '②', '２', '➋', '🟔', '②', '🄏', '🄒', '🄜', '🄢', '🄪'],
+            '3': ['③', '𝟯', '𝟑', '𝟛', '𝟹', '𝟹', '₃', '³', 'Ⅲ', '③', '３', '➌', '🟕', '③', '🄐', '🄓', '🄝', '🄣', '🄫', '🄭', '③', '𝟯', '𝟑', '🟉', '🟐', '➌', '🟕', '③', '₃', '³', 'Ⅲ', '③', '３', '➌', '🟕', '③', '🄐', '🄓', '🄝', '🄣', '🄫'],
+            '4': ['④', '𝟰', '𝟒', '𝟜', '𝟦', '𝟺', '₄', '⁴', 'Ⅳ', '④', '４', '➍', '🟖', '④', '🄑', '🄔', '🄞', '🄤', '🄬', '🄮', '④', '𝟰', '𝟒', '🟊', '🟑', '➍', '🟖', '④', '₄', '⁴', 'Ⅳ', '④', '４', '➍', '🟖', '④', '🄑', '🄔', '🄞', '🄤', '🄬'],
+            '5': ['⑤', '𝟱', '𝟓', '𝟝', '𝟧', '𝟻', '₅', '⁵', 'Ⅴ', '⑤', '５', '➎', '🟗', '⑤', '🄒', '🄕', '🄟', '🄥', '🄭', '🄯', '⑤', '𝟱', '𝟓', '🟋', '🟒', '➎', '🟗', '⑤', '₅', '⁵', 'Ⅴ', '⑤', '５', '➎', '🟗', '⑤', '🄒', '🄕', '🄟', '🄥', '🄭'],
+            '6': ['⑥', '𝟲', '𝟔', '𝟞', '𝟨', '𝟼', '₆', '⁶', 'Ⅵ', '⑥', '６', '➏', '🟘', '⑥', '🄓', '🄖', '🄠', '🄦', '🄮', '🄰', '⑥', '𝟲', '𝟔', '🟌', '🟓', '➏', '🟘', '⑥', '₆', '⁶', 'Ⅵ', '⑥', '６', '➏', '🟘', '⑥', '🄓', '🄖', '🄠', '🄦', '🄮'],
+            '7': ['⑦', '𝟳', '𝟕', '𝟽', '𝟽', '𝟻', '₇', '⁷', 'Ⅶ', '⑦', '７', '➐', '🟙', '⑦', '🄔', '🄗', '🄡', '🄧', '🄯', '🄱', '⑦', '𝟳', '𝟕', '🟍', '🟔', '➐', '🟙', '⑦', '₇', '⁷', 'Ⅶ', '⑦', '７', '➐', '🟙', '⑦', '🄔', '🄗', '🄡', '🄧', '🄯'],
+            '8': ['⑧', '𝟴', '𝟖', '𝟠', '𝟾', '𝟾', '₈', '⁸', 'Ⅷ', '⑧', '８', '➑', '🟚', '⑧', '🄕', '🄘', '🄢', '🄨', '🄰', '🄲', '⑧', '𝟴', '𝟖', '🟏', '🟗', '➑', '🟚', '⑧', '₈', '⁸', 'Ⅷ', '⑧', '８', '➑', '🟚', '⑧', '🄕', '🄘', '🄢', '🄨', '🄰'],
+            '9': ['⑨', '𝟵', '𝟗', '𝟡', '𝟫', '𝟫', '₉', '⁹', 'Ⅸ', '⑨', '９', '➒', '🟛', '⑨', '🄖', '🄙', '🄣', '🄩', '🄱', '🄳', '⑨', '𝟵', '𝟗', '🟗', '🟘', '➒', '🟛', '⑨', '₉', '⁹', 'Ⅸ', '⑨', '９', '➒', '🟛', '⑨', '🄖', '🄙', '🄣', '🄩', '🄱'],
+            ' ': [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            '.': ['﹒', '·', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•', '•'],
+            ',': ['﹐', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','],
+            '!': ['ᵎ', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!', '!'],
+            '?': ['ˀ', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?'],
+            '-': ['—', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+        };
+
+        const STYLE_NAMES = [
+            'Circled', 'Bold Sans', 'Handwritten', 'Script', 'Bold Script', 'Fraktur', 'Bold Fraktur', 'Blackboard Bold',
+            'Bold', 'Italic', 'Bold Italic', 'Monospace', 'Full Width', 'Small Caps', 'Superscript', 'Subscript',
+            'Slashed/Barred', 'Greek Letters', 'Hearts Decor', 'Inverted', 'Small Caps Reversed', 'Squared Black',
+            'Squared White', 'Rounded Box', 'Bubble Text', 'Fancy/Mix', 'Diamond Box', 'Cyrillic Mock', 'Thick Border',
+            'Small Italic', 'Weird Glitch', 'Stars Decor', 'Double Struck', 'Parenthesized', 'Clap Text (Wide)', 'Full Strikethrough',
+            'Double Underline', 'Bubble Star Mix', 'Fancy Slanted', 'Arrow Mix', 'Diamond Outlined', 'Cyrillic Mock 2',
+            'Dot Above', 'Double Struck 2'
+        ];
+
+        function transformText(text, index) {
+            let result = '';
+            for (const char of text) {
+                const lowerChar = char.toLowerCase();
+                const map = UNICODE_MAP[char.toLowerCase()];
+
+                if (map) {
+                    let styleIndex = index % map.length;
+                    let mappedChar = map[styleIndex];
+                    
+                    if (index === 34) { 
+                        if (char === ' ') {
+                            result += '  ';
+                        } else {
+                            result += mappedChar.toUpperCase() + ' ';
+                        }
+                        continue;
+                    }
+                    
+                    if (index === 35) {
+                        result += char + '\u0336';
+                        continue;
+                    }
+                    
+                    if (index === 36) {
+                        result += char + '\u0333';
+                        continue;
+                    }
+
+                    if (mappedChar.length === 1 && mappedChar.toUpperCase() !== mappedChar.toLowerCase() && char !== lowerChar) {
+                        result += mappedChar.toUpperCase();
+                    } else {
+                        result += mappedChar;
+                    }
+
+                } else {
+                    result += char;
+                }
+            }
+            return result.trim();
+        }
+
+        // ==========================================
+        // SECTION A — NEW 45 ENGLISH STYLES
+        // ==========================================
+        const CHAR_MAPS = {
+            boldSerif: {
+                A: '𝐀', B: '𝐁', C: '𝐂', D: '𝐃', E: '𝐄', F: '𝐅', G: '𝐆', H: '𝐇', I: '𝐈', J: '𝐉', K: '𝐊', L: '𝐋', M: '𝐌',
+                N: '𝐍', O: '𝐎', P: '𝐏', Q: '𝐐', R: '𝐑', S: '𝐒', T: '𝐓', U: '𝐔', V: '𝐕', W: '𝐖', X: '𝐗', Y: '𝐘', Z: '𝐙',
+                a: '𝐚', b: '𝐛', c: '𝐜', d: '𝐝', e: '𝐞', f: '𝐟', g: '𝐠', h: '𝐡', i: '𝐢', j: '𝐣', k: '𝐤', l: '𝐥', m: '𝐦',
+                n: '𝐧', o: '𝐨', p: '𝐩', q: '𝐪', r: '𝐫', s: '𝐬', t: '𝐭', u: '𝐮', v: '𝐯', w: '𝐰', x: '𝐱', y: '𝐲', z: '𝐳'
+            },
+            italicSerif: {
+                A: '𝘈', B: '𝘉', C: '𝘊', D: '𝘋', E: '𝘌', F: '𝘍', G: '𝘎', H: '𝘏', I: '𝘐', J: '𝘑', K: '𝘒', L: '𝘓', M: '𝘔',
+                N: '𝘕', O: '𝘖', P: '𝘗', Q: '𝘘', R: '𝘙', S: '𝘚', T: '𝘛', U: '𝘜', V: '𝘝', W: '𝘞', X: '𝘟', Y: '𝘠', Z: '𝘡',
+                a: '𝘢', b: '𝘣', c: '𝘤', d: '𝘥', e: '𝘦', f: '𝘧', g: '𝘨', h: '𝘩', i: '𝘪', j: '𝘫', k: '𝘬', l: '𝘭', m: '𝘮',
+                n: '𝘯', o: '𝘰', p: '𝘱', q: '𝘲', r: '𝘳', s: '𝘴', t: '𝘵', u: '𝘶', v: '𝘷', w: '𝘸', x: '𝘹', y: '𝘺', z: '𝘻'
+            },
+            boldItalicSerif: {
+                A: '𝑨', B: '𝑩', C: '𝑪', D: '𝑫', E: '𝑬', F: '𝑭', G: '𝑮', H: '𝑯', I: '𝑰', J: '𝑱', K: '𝑲', L: '𝑳', M: '𝑴',
+                N: '𝑵', O: '𝑶', P: '𝑷', Q: '𝑸', R: '𝑹', S: '𝑺', T: '𝑻', U: '𝑼', V: '𝑽', W: '𝑾', X: '𝑿', Y: '𝒀', Z: '𝒁',
+                a: '𝒂', b: '𝒃', c: '𝒄', d: '𝒅', e: '𝒆', f: '𝒇', g: '𝒈', h: '𝒉', i: '𝒊', j: '𝒋', k: '𝒌', l: '𝒍', m: '𝒎',
+                n: '𝒏', o: '𝒐', p: '𝒑', q: '𝒒', r: '𝒓', s: '𝒔', t: '𝒕', u: '𝒖', v: '𝒗', w: '𝒘', x: '𝒙', y: '𝒚', z: '𝒛'
+            },
+            script: {
+                A: '𝓐', B: '𝓑', C: '𝓒', D: '𝓓', E: '𝓔', F: '𝓕', G: '𝓖', H: '𝓗', I: '𝓘', J: '𝓙', K: '𝓚', L: '𝓛', M: '𝓜',
+                N: '𝓝', O: '𝓞', P: '𝓟', Q: '𝓠', R: '𝓡', S: '𝓢', T: '𝓣', U: '𝓤', V: '𝓥', W: '𝓦', X: '𝓧', Y: '𝓨', Z: '𝓩',
+                a: '𝓪', b: '𝓫', c: '𝓬', d: '𝓭', e: '𝓮', f: '𝓯', g: '𝓰', h: '𝓱', i: '𝓲', j: '𝓳', k: '𝓴', l: '𝓵', m: '𝓶',
+                n: '𝓷', o: '𝓸', p: '𝓹', q: '𝓺', r: '𝓻', s: '𝓼', t: '𝓽', u: '𝓾', v: '𝓿', w: '𝔀', x: '𝔁', y: '𝔂', z: '𝔃'
+            },
+            boldFraktur: {
+                A: '𝕬', B: '𝕭', C: '𝕮', D: '𝕯', E: '𝕰', F: '𝕱', G: '𝕲', H: '𝕳', I: '𝕴', J: '𝕵', K: '𝕶', L: '𝕷', M: '𝕸',
+                N: '𝕹', O: '𝕺', P: '𝕻', Q: '𝕼', R: '𝕽', S: '𝕾', T: '𝕿', U: '𝖀', V: '𝖁', W: '𝖂', X: '𝖃', Y: '𝖄', Z: '𝖅',
+                a: '𝖆', b: '𝖇', c: '𝖈', d: '𝖉', e: '𝖊', f: '𝖋', g: '𝖌', h: '𝖍', i: '𝖎', j: '𝖏', k: '𝖐', l: '𝖑', m: '𝖒',
+                n: '𝖓', o: '𝖔', p: '𝖕', q: '𝖖', r: '𝖗', s: '𝖘', t: '𝖙', u: '𝖚', v: '𝖛', w: '𝖜', x: '𝖝', y: '𝖞', z: '𝖟'
+            },
+            fraktur: {
+                A: '𝔄', B: '𝔅', C: 'ℭ', D: '𝔇', E: '𝔈', F: '𝔉', G: '𝔊', H: 'ℌ', I: 'ℑ', J: '𝔍', K: '𝔎', L: '𝔏', M: '𝔐',
+                N: '𝔑', O: '𝔒', P: '𝔓', Q: '𝔔', R: 'ℜ', S: '𝔖', T: '𝔗', U: '𝔘', V: '𝔙', W: '𝔚', X: '𝔛', Y: '𝔜', Z: 'ℨ',
+                a: '𝔞', b: '𝔟', c: '𝔠', d: '𝔡', e: '𝔢', f: '𝔣', g: '𝔤', h: '𝔥', i: '𝔦', j: '𝔧', k: '𝔨', l: '𝔩', m: '𝔪',
+                n: '𝔫', o: '𝔬', p: '𝔭', q: '𝔮', r: '𝔯', s: '𝔰', t: '𝔱', u: '𝔲', v: '𝔳', w: '𝔴', x: '𝔵', y: '𝔶', z: '𝔷'
+            },
+            monospace: {
+                A: '𝙰', B: '𝙱', C: '𝙲', D: '𝙳', E: '𝙴', F: '𝙵', G: '𝙶', H: '𝙷', I: '𝙸', J: '𝙹', K: '𝙺', L: '𝙻', M: '𝙼',
+                N: '𝙽', O: '𝙾', P: '𝙿', Q: '𝚀', R: '𝚁', S: '𝚂', T: '𝚃', U: '𝚄', V: '𝚅', W: '𝚆', X: '𝚇', Y: '𝚈', Z: '𝚉',
+                a: '𝚊', b: '𝚋', c: '𝚌', d: '𝚍', e: '𝚎', f: '𝚏', g: '𝚐', h: '𝚑', i: '𝚒', j: '𝚓', k: '𝚔', l: '𝚕', m: '𝚖',
+                n: '𝚗', o: '𝚘', p: '𝚙', q: '𝚚', r: '𝚛', s: '𝚜', t: '𝚝', u: '𝚞', v: '𝚟', w: '𝚠', x: '𝚡', y: '𝚢', z: '𝚣'
+            },
+            cyber: {
+                A: 'Δ', B: 'ß', C: 'C', D: 'Ð', E: 'Ξ', F: 'F', G: 'G', H: 'H', I: 'I', J: 'J', K: 'K', L: 'L', M: 'M',
+                N: 'И', O: 'Ө', P: 'P', Q: 'Q', R: 'R', S: '§', T: 'T', U: 'U', V: 'V', W: 'W', X: 'X', Y: 'Y', Z: 'Z',
+                a: 'Δ', b: 'ß', c: 'c', d: 'ð', e: 'Ξ', f: 'f', g: 'g', h: 'h', i: 'i', j: 'j', k: 'k', l: 'l', m: 'm',
+                n: 'и', o: 'ø', p: 'p', q: 'q', r: 'r', s: '§', t: 't', u: 'u', v: 'v', w: 'w', x: 'x', y: 'y', z: 'z'
+            }
+        };
+
+        function mapWithCharMap(text, map) {
+            return text.split('').map(c => map[c] || c).join('');
+        }
+
+        const NEW_ENGLISH_STYLES = [
+            // 1. Unicode Typography Styles
+            { name: "New Script", fn: t => mapWithCharMap(t, CHAR_MAPS.script) },
+            { name: "New Bold Script", fn: t => mapWithCharMap(t, CHAR_MAPS.script) },
+            { name: "New Fraktur", fn: t => mapWithCharMap(t, CHAR_MAPS.fraktur) },
+            { name: "New Bold Fraktur", fn: t => mapWithCharMap(t, CHAR_MAPS.boldFraktur) },
+            { name: "New Blackboard Bold", fn: t => transformText(t, 7) },
+            { name: "New Bold Serif", fn: t => mapWithCharMap(t, CHAR_MAPS.boldSerif) },
+            { name: "New Italic Serif", fn: t => mapWithCharMap(t, CHAR_MAPS.italicSerif) },
+            { name: "New Bold Italic", fn: t => mapWithCharMap(t, CHAR_MAPS.boldItalicSerif) },
+            { name: "New Monospace", fn: t => mapWithCharMap(t, CHAR_MAPS.monospace) },
+            { name: "New Full Width", fn: t => transformText(t, 12) },
+            { name: "New Small Caps", fn: t => transformText(t, 13) },
+            { name: "New Superscript", fn: t => transformText(t, 14) },
+            { name: "New Circled", fn: t => transformText(t, 0) },
+            { name: "New Squared", fn: t => transformText(t, 21) },
+            { name: "Parenthesized / Decorative", fn: t => `『${t}』` },
+
+            // 2. Luxury & Royal Styles
+            { name: "Royal Signature", fn: t => `꧁༺ ${t} ༻꧂` },
+            { name: "Royal Crown", fn: t => `♛ ${mapWithCharMap(t, CHAR_MAPS.boldItalicSerif)} ♛` },
+            { name: "Dark Royal", fn: t => `𓆩♛𓆪 ${mapWithCharMap(t, CHAR_MAPS.boldFraktur)}` },
+            { name: "Imperial Crest", fn: t => `♜⫷ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.boldFraktur)} ⫸♜` },
+            { name: "Luxury Diamond", fn: t => {
+                const words = t.split(' ');
+                if (words.length > 1) {
+                    return `◆⟪ ${words[0].toUpperCase()} ⟫ ◈ ⟪ ${words.slice(1).join(' ').toUpperCase()} ⟫◆`;
+                }
+                return `◆⟪ ${t.toUpperCase()} ⟫ ◈ ⟪ ${t.toUpperCase()} ⟫◆`;
+            }},
+            { name: "Ultra Signature", fn: t => `乂⟡ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.boldItalicSerif)} ⟡乂` },
+            { name: "VIP Legend", fn: t => `♚『${t}』♚` },
+            { name: "Star Royal", fn: t => `✦༺ ${t} ༻✦` },
+            { name: "Mystic Seal", fn: t => `༒︎⟡ ${t} ⟡༒︎` },
+            { name: "Phantom Crown", fn: t => `♕𓆩 ${t} 𓆪♕` },
+
+            // 3. Cyberpunk & Gaming Styles
+            { name: "Cyber Elite", fn: t => `⫷ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber)} ⫸` },
+            { name: "Cyber Matrix", fn: t => `⌬ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber).split(' ').join(' ⫶ ')} ⌬` },
+            { name: "Shadow Mark", fn: t => {
+                const parts = t.split(' ');
+                if (parts.length > 1) {
+                    return `乂『${mapWithCharMap(parts[0].toUpperCase(), CHAR_MAPS.cyber)}』×『${mapWithCharMap(parts.slice(1).join(' ').toUpperCase(), CHAR_MAPS.cyber)}』乂`;
+                }
+                return `乂『${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber)}』乂`;
+            }},
+            { name: "Gaming Pro", fn: t => `亗〆 ${t} 亗` },
+            { name: "Techno Rune", fn: t => `⟬ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber).split(' ').join(' ⌇ ')} ⟭` },
+            { name: "Holographic", fn: t => `⌁ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber).split(' ').join(' ≋ ')} ⌁` },
+            { name: "Obsidian", fn: t => {
+                const parts = t.split(' ');
+                if (parts.length > 1) {
+                    return `◣ ${mapWithCharMap(parts[0].toUpperCase(), CHAR_MAPS.monospace)} ╳ ${mapWithCharMap(parts.slice(1).join(' ').toUpperCase(), CHAR_MAPS.monospace)} ◢`;
+                }
+                return `◣ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.monospace)} ╳ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.monospace)} ◢`;
+            }},
+            { name: "Phantom", fn: t => `𓂀 ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber).split('').join(' ')} 𓂀` },
+            { name: "Forbidden Luxe", fn: t => `⛧༺ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber)} ༻⛧` },
+            { name: "Black Diamond", fn: t => `◆⟪ ${mapWithCharMap(t.toUpperCase(), CHAR_MAPS.cyber)} ⟫◆` },
+
+            // 4. Special Effects & Decorations
+            { name: "New Strikethrough", fn: t => t.split('').map(c => c + '\u0336').join('') },
+            { name: "New Double Underline", fn: t => t.split('').map(c => c + '\u0333').join('') },
+            { name: "Dot / Accent Mix", fn: t => {
+                let out = '';
+                for (let i = 0; i < t.length; i++) {
+                    const char = t[i];
+                    out += (i % 2 === 0) ? (CHAR_MAPS.boldFraktur[char] || char) : (CHAR_MAPS.script[char] || char);
+                }
+                return out;
+            }},
+            { name: "Double Struck Mix", fn: t => {
+                let out = '';
+                for (let i = 0; i < t.length; i++) {
+                    const char = t[i];
+                    out += (i % 2 === 0) ? transformText(char, 7) : (CHAR_MAPS.fraktur[char] || char);
+                }
+                return out;
+            }},
+            { name: "New Stars Decor", fn: t => `★彡 ${t} 彡★` },
+            { name: "New Hearts Decor", fn: t => `♥ ${t} ♥` },
+            { name: "New Arrow Mix", fn: t => mapWithCharMap(t, CHAR_MAPS.script).split(' ').join(' ➜ ') },
+            { name: "Celestial", fn: t => `☾⋆ ${t} ⋆☽` },
+            { name: "Glitch", fn: t => t.toUpperCase().split('').map(c => c + '\u0337').join('') },
+            { name: "Elite Minimal", fn: t => `⟡ ${t.toUpperCase().split('').join(' ')} ⟡` }
+        ];
+
+        // ==========================================
+        // SECTION B — BANGLA FONT STYLES (30 STYLES)
+        // ==========================================
+        const BANGLA_STYLES = [
+            // 1. Royal Bangla Styles
+            { name: "Royal King", format: t => `꧁༒☬ ${t} ☬༒꧂` },
+            { name: "VIP Signature", format: t => `𓆩♛༺ ${t} ༻♛𓆪` },
+            { name: "Dark Elite", format: t => `乂『${t}』乂` },
+            { name: "Luxury Crown", format: t => `♛彡 ${t} 彡♛` },
+            { name: "Royal Frame", format: t => `꧁༺ ${t} ༻꧂` },
+            { name: "Shadow King", format: t => `◥꧁༒ ${t} ༒꧂◤` },
+            { name: "Diamond Style", format: t => `◆❖ ${t} ❖◆` },
+            { name: "Elite Signature", format: t => `༺𓆩 ${t} 𓆪༻` },
+            { name: "VIP Legend", format: t => `♚『${t}』♚` },
+            { name: "Mystic Bangla", format: t => `𖤍༒ ${t} ༒𖤍` },
+
+            // 2. Gaming Bangla Styles
+            { name: "Gaming Pro", format: t => `亗〆 ${t} 亗` },
+            { name: "Premium X", format: t => `乂⟡ ${t} ⟡乂` },
+            { name: "Dark Emperor", format: t => `♜⫷ ${t} ⫸♜` },
+            { name: "Ultra Signature", format: t => `꧁𓊈𒆜 ${t} 𒆜𓊉꧂` },
+            { name: "Secret Society", format: t => `◈༒ ${t} ༒◈` },
+            { name: "Star Royal", format: t => `✦༺ ${t} ༻✦` },
+            { name: "Celestial Bangla", format: t => `☾⋆ ${t} ⋆☽` },
+            { name: "Phantom Crown", format: t => `♕𓆩 ${t} 𓆪♕` },
+            { name: "Black Diamond", format: t => `◆⟪ ${t} ⟫◆` },
+            { name: "Royal Blade", format: t => `⚔『${t}』⚔` },
+
+            // 3. Bangla Decorative Styles
+            { name: "Star Decoration", format: t => `★彡 ${t} 彡★` },
+            { name: "Heart Decoration", format: t => `♥༺ ${t} ༻♥` },
+            { name: "Arrow Decoration", format: t => `⫷ ${t} ⫸` },
+            { name: "Minimal Premium", format: t => `⟡ ${t} ⟡` },
+            { name: "Double Frame", format: t => `『༺ ${t} ༻』` },
+            { name: "Diamond Frame", format: t => `◈⟦ ${t} ⟧◈` },
+            { name: "Mystic Frame", format: t => `𖤍『${t}』𖤍` },
+            { name: "Crown Frame", format: t => `♛꧁ ${t} ꧂♛` },
+            { name: "Elite Frame", format: t => `𓆩 ${t} 𓆪` },
+            { name: "VIP Frame", format: t => `亗『${t}』亗` }
+        ];
+
+        function generateCardHTML(styleName, transformedText, elementId, isBangla = false) {
+            const fontClass = isBangla ? 'bangla-text' : '';
+            return `
+            <div class="p-4 font-style-box">
+                <div>
+                    <p class="text-sm font-semibold text-gray-700 mb-2 ${fontClass}">${styleName}</p>
+                </div>
+                <div class="flex items-center justify-between space-x-2 flex-grow min-h-[50px]">
+                    <p id="${elementId}" class="text-lg sm:text-xl break-all flex-grow font-medium ${fontClass}">${transformedText}</p>
+                    <div class="flex flex-shrink-0 space-x-2">
+                        <button class="action-button p-2 text-sm rounded-lg hover:opacity-80 transition-all duration-100" onclick="copyText('${elementId}', this)" title="Copy">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                        <button class="action-button p-2 text-sm rounded-lg bg-red-500 hover:opacity-80 transition-all duration-100" onclick="shareText('${elementId}', '${styleName}')" title="Share">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function updateStyles() {
+            const outputContainer = document.getElementById('styles-output');
+            let htmlContent = '';
+
+            if (currentLanguage === 'bn') {
+                const input = document.getElementById('text-input').value || 'এখানে তোমার নাম লিখো';
+                BANGLA_STYLES.forEach((style, index) => {
+                    const transformed = style.format(input);
+                    htmlContent += generateCardHTML(style.name, transformed, `bn-style-${index}`, true);
+                });
+            } else {
+                const input = document.getElementById('text-input').value || 'Type something to start';
+
+                // 1. Existing 44 English Styles (100% Unaltered)
+                STYLE_NAMES.forEach((name, index) => {
+                    const transformed = transformText(input, index);
+                    htmlContent += generateCardHTML(name, transformed, `style-${index}`, false);
+                });
+
+                // 2. New 45 English Styles (Added seamlessly)
+                NEW_ENGLISH_STYLES.forEach((style, index) => {
+                    const transformed = style.fn(input);
+                    htmlContent += generateCardHTML(style.name, transformed, `new-en-style-${index}`, false);
+                });
+            }
+
+            outputContainer.innerHTML = htmlContent;
+            lucide.createIcons();
+        }
+
+        function copyAllGeneratedText() {
+            const outputContainer = document.getElementById('styles-output');
+            const pElements = outputContainer.querySelectorAll('p[id]');
+            let allText = [];
+
+            pElements.forEach(el => {
+                if (el.textContent.trim()) {
+                    allText.push(el.textContent.trim());
+                }
+            });
+
+            if (allText.length === 0) return;
+
+            const combined = allText.join('\n');
+            performCopy(combined);
+            const msg = currentLanguage === 'bn' ? 'সবগুলো স্টাইল সফলভাবে কপি করা হয়েছে!' : 'All styles copied to clipboard!';
+            alertBox(msg, 'bg-emerald-600');
+        }
+
+        function performCopy(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
+        function copyText(elementId, button) {
+            const textElement = document.getElementById(elementId);
+            const text = textElement ? textElement.textContent : '';
+            if (!text) return;
+
+            performCopy(text);
+
+            const originalHtml = button.innerHTML;
+            const originalBg = button.style.backgroundColor;
+
+            button.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>';
+            button.style.backgroundColor = '#10B981';
+
+            setTimeout(() => {
+                button.innerHTML = originalHtml;
+                button.style.backgroundColor = originalBg;
+                lucide.createIcons();
+            }, 1500);
+        }
+
+        function shareText(elementId, fontName) {
+            const textElement = document.getElementById(elementId);
+            const text = textElement ? textElement.textContent : '';
+            if (!text) return;
+
+            const shareData = {
+                title: 'Check out this awesome text!',
+                text: `${text} (Style: ${fontName})`,
+                url: window.location.href,
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .catch((error) => {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+                    });
+            } else {
+                alertBox('Share not supported by your browser. Text copied instead!', 'bg-red-500');
+                performCopy(shareData.text);
+            }
+        }
+
+        function alertBox(message, bgColor) {
+            let box = document.getElementById('custom-alert');
+            if (!box) {
+                box = document.createElement('div');
+                box.id = 'custom-alert';
+                box.classList.add('fixed', 'bottom-4', 'left-1/2', '-translate-x-1/2', 'p-4', 'rounded-lg', 'text-white', 'shadow-xl', 'z-50', 'transition-opacity', 'duration-300', 'opacity-0', 'min-w-[200px]', 'text-center');
+                document.body.appendChild(box);
+            }
+
+            box.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 p-4 rounded-lg text-white shadow-xl z-50 transition-opacity duration-300';
+            box.classList.add(bgColor);
+            box.textContent = message;
+
+            requestAnimationFrame(() => {
+                box.classList.remove('opacity-0');
+                box.classList.add('opacity-100');
+            });
+
+            setTimeout(() => {
+                box.classList.remove('opacity-100');
+                box.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            updateStyles();
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
